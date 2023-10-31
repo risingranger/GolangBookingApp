@@ -3,6 +3,7 @@ package main
 import (
 	"booking-app/helper" // path refered from the GOPATH ie the mod file.This is for self created packages.
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -20,6 +21,8 @@ type UserData struct {
 	email           string
 	numberOfTickets uint
 }
+
+var wg = sync.WaitGroup{}
 
 func main() {
 
@@ -40,15 +43,18 @@ func main() {
 			/*fmt.Printf("Hi %v, your booking is confirmed\n", bookings[0])
 			fmt.Printf("Slice type %v\n", bookings)
 			fmt.Printf("Slice length: %v\n", len(bookings))*/
-
 			bookTickets(userTickets, firstName, lastName, email)
+
+			wg.Add(1) // Wait for 1 goroutine to finish
+
 			go sendTickets(userTickets, firstName, lastName, email) // go keyword is used to run the function in a separate thread. This is called go routine.
+
 			firstNames := getFirstNames()
 			fmt.Printf("First names of all the bookings: %v\n", firstNames)
 
 			if remainingTickets == 0 {
 				fmt.Println("Sorry! We are sold out! Please come back next year")
-				break
+				//break
 			}
 		} else {
 			if !isValidName {
@@ -63,9 +69,8 @@ func main() {
 			// fmt.Printf("Sorry! We only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
 			fmt.Println("Your input is invalid. Please try again")
 		}
-
 	}
-
+	wg.Wait() // Wait for all goroutines to finish
 }
 
 func greetUsers() {
@@ -131,6 +136,7 @@ func sendTickets(userTickets uint, firstName string, lastName string, email stri
 	time.Sleep(10 * time.Second)
 	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
 	fmt.Println("Sending tickets...")
-	fmt.Printf("Sending tickets:\n %v  to email address %v \n", ticket, email)
+	fmt.Printf("\n Sent: %v  to email address %v \n", ticket, email)
 	fmt.Println("Tickets sent!")
+	wg.Done() // Decrement the counter
 }
