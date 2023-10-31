@@ -3,6 +3,7 @@ package main
 import (
 	"booking-app/helper" // path refered from the GOPATH ie the mod file.This is for self created packages.
 	"fmt"
+	"time"
 )
 
 const conferenceTickets int = 50
@@ -41,7 +42,7 @@ func main() {
 			fmt.Printf("Slice length: %v\n", len(bookings))*/
 
 			bookTickets(userTickets, firstName, lastName, email)
-
+			go sendTickets(userTickets, firstName, lastName, email) // go keyword is used to run the function in a separate thread. This is called go routine.
 			firstNames := getFirstNames()
 			fmt.Printf("First names of all the bookings: %v\n", firstNames)
 
@@ -115,7 +116,6 @@ func bookTickets(userTickets uint, firstName string, lastName string, email stri
 	}
 	bookings = append(bookings, userData)
 	fmt.Printf("List of all the bookings: %v\n", bookings)
-
 	fmt.Printf("Your name is %v %v and your email is %v and you have booked %v tickets\n", firstName, lastName, email, userTickets)
 	fmt.Printf("We have %v tickets remaining\n", remainingTickets)
 
@@ -124,8 +124,13 @@ func bookTickets(userTickets uint, firstName string, lastName string, email stri
 	// userData["email"] = email
 	// userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10) //converts uint to string and 10 is the base
 	//userData["tickets"] = fmt.Sprint(userTickets) //converts uint to string
-
 	//user := map[string]string{}
-
 	//fmt.Printf("The Whole array is %v\n", bookings)
+}
+func sendTickets(userTickets uint, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	fmt.Println("Sending tickets...")
+	fmt.Printf("Sending tickets:\n %v  to email address %v \n", ticket, email)
+	fmt.Println("Tickets sent!")
 }
