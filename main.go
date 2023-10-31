@@ -29,47 +29,47 @@ func main() {
 	greetUsers()
 	//fmt.Println("We have total", conferenceTickets, "We currently have", remainingTickets, "tickets remaining")
 
-	for remainingTickets > 0 && remainingTickets <= 50 {
-		firstName, lastName, email, userTickets := getUserInput()
+	// for remainingTickets > 0 && remainingTickets <= 50 {
+	firstName, lastName, email, userTickets := getUserInput()
 
-		//packagename.FunctionName to call a function from another package
+	//packagename.FunctionName to call a function from another package
 
-		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+	isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
-		if isValidName && isValidEmail && isValidTicketNumber {
+	if isValidName && isValidEmail && isValidTicketNumber {
 
-			// bookings[0] = firstName + " " + lastName //This can be done only if we have already defined the size of the array
+		// bookings[0] = firstName + " " + lastName //This can be done only if we have already defined the size of the array
 
-			/*fmt.Printf("Hi %v, your booking is confirmed\n", bookings[0])
-			fmt.Printf("Slice type %v\n", bookings)
-			fmt.Printf("Slice length: %v\n", len(bookings))*/
-			bookTickets(userTickets, firstName, lastName, email)
+		/*fmt.Printf("Hi %v, your booking is confirmed\n", bookings[0])
+		fmt.Printf("Slice type %v\n", bookings)
+		fmt.Printf("Slice length: %v\n", len(bookings))*/
+		bookTickets(userTickets, firstName, lastName, email)
 
-			wg.Add(1) // Wait for 1 goroutine to finish
+		wg.Add(1) // Wait for 1 goroutine to finish
 
-			go sendTickets(userTickets, firstName, lastName, email) // go keyword is used to run the function in a separate thread. This is called go routine.
+		go sendTickets(userTickets, firstName, lastName, email) // go keyword is used to run the function in a separate thread. This is called go routine.
 
-			firstNames := getFirstNames()
-			fmt.Printf("First names of all the bookings: %v\n", firstNames)
+		firstNames := getFirstNames()
+		fmt.Printf("First names of all the bookings: %v\n", firstNames)
 
-			if remainingTickets == 0 {
-				fmt.Println("Sorry! We are sold out! Please come back next year")
-				//break
-			}
-		} else {
-			if !isValidName {
-				fmt.Println("First name or last name is too short. Please enter again.")
-			}
-			if !isValidEmail {
-				fmt.Println("Email is not valid")
-			}
-			if !isValidTicketNumber {
-				fmt.Println("Ticket number is not valid")
-			}
-			// fmt.Printf("Sorry! We only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
-			fmt.Println("Your input is invalid. Please try again")
+		if remainingTickets == 0 {
+			fmt.Println("Sorry! We are sold out! Please come back next year")
+			//break
 		}
+	} else {
+		if !isValidName {
+			fmt.Println("First name or last name is too short. Please enter again.")
+		}
+		if !isValidEmail {
+			fmt.Println("Email is not valid")
+		}
+		if !isValidTicketNumber {
+			fmt.Println("Ticket number is not valid")
+		}
+		// fmt.Printf("Sorry! We only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
+		fmt.Println("Your input is invalid. Please try again")
 	}
+	// }
 	wg.Wait() // Wait for all goroutines to finish
 }
 
