@@ -1,3 +1,3 @@
-module test-app
+module booking-app
 
 go 1.21.2
